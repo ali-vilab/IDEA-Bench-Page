@@ -1,0 +1,2619 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+    <!-- Replace the content tag with appropriate information -->
+    <meta name="description"
+        content="We introduce IDEA-Bench, a one-stop library to standardize the inference and evaluation of all the conditional image generation models.">
+    <meta property="og:title" content="IDEA-Bench: : How Far are Generative Models from Professional Designing?" />
+    <meta property="og:description"
+        content="A one-stop library to standardize the inference and evaluation of all the conditional image generation models." />
+    <meta property="og:url" content="https://tiger-ai-lab.github.io/IDEA-Bench/" />
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+    <meta property="og:image" content="static/images/tasks_vis.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+
+    <meta name="twitter:title" content="IDEA-Bench:: How Far are Generative Models from Professional Designing?">
+    <meta name="twitter:description"
+        content="A one-stop library to standardize the inference and evaluation of all the conditional image generation models.">
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+    <meta name="twitter:image" content="static/images/tasks_vis.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Keywords for your paper to be indexed by-->
+    <meta name="keywords" content="ideabench">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>IDEA-Bench</title>
+    <link rel="icon" type="image/x-icon" href="static/images/favicon_io/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="static/css/index.css">
+
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/main.js"></script>
+    <script defer src="static/js/fontawesome.all.min.js"></script>
+    <script src="static/js/bulma-carousel.min.js"></script>
+    <script src="static/js/bulma-slider.min.js"></script>
+    <script src="static/js/index.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="static/js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="static/js/jquery.dataTables.js"></script>
+
+    <!-- 引入 ECharts 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+
+<body>
+
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title"> IDEA-Bench: How Far are Generative Models from
+                            Professional Designing?</h1>
+                        <img src="static/images/tasks_vis.png" width="100%" alt="IDEA-Bench" />
+
+                        <div class="is-size-5 publication-authors">
+                            <!-- Paper authors -->
+                            <span class="author-block">
+                                <sup>†</sup><a href="" target="_blank">Chen Liang</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♠️</sup><a href="" target="_blank">Lianghua Huang</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♣</sup><a href="" target="_blank">Jingwu Fang</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♥</sup><a href="" target="_blank">Huanzhang Dou</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♠️</sup><a href="" target="_blank">Wei Wang</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♠️</sup><a href="" target="_blank">Zhi-Fan Wu</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♠️</sup><a href="" target="_blank">Yupeng Shi</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>†</sup><a href="" target="_blank">Junge Zhang</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♣</sup><a href="" target="_blank">Xin Zhao</a>,
+                            </span>
+                            <span class="author-block">
+                                <sup>♠️</sup><a href="" target="_blank">Yu Liu</a>,
+                            </span>
+                        </div>
+
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                                <sup>♠️</sup>Tongyi Lab,
+                                <sup>†</sup>Institute of Automation, Chinese Academy of Sciences,
+                                <sup>♣</sup>University of Sciense and Technology Beijing,
+                                <sup>♥</sup>Zhejiang University
+                            </span>
+                            <span class="author-block"><small>liangchen2022@ia.ac.cn, xuangen.hlh@alibaba-inc.com,
+                                    u202143361@xs.ustb.edu.cn, hzdou@zju.edu.cn, ww413411@alibaba-inc.com,
+                                    wuzhifan.wzf@alibaba-inc.com, shiyupeng.syp@taobao.com, xinzhao@ustb.edu.cn,
+                                    jgzhang@nlpr.ia.ac.cn, ly103369@alibaba-inc.com</small></span>
+
+                        </div>
+
+                        <div class="column has-text-centered">
+
+                            <!-- <h2 class="title is-5">ICLR 2024</h2> -->
+
+                            <div class="publication-links">
+                                <span class="link-block">
+                                    <a href="https://huggingface.co/datasets/JasiLiang/IDEA-Bench" target="_blank"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            🤗
+                                        </span>
+                                        <span>Dataset</span>
+                                    </a>
+                                </span>
+
+                                <!-- Github link -->
+                                <span class="link-block">
+                                    <a href="https://github.com/ali-vilab/IDEA-Bench" target="_blank"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <span>Code</span>
+                                    </a>
+                                </span>
+
+                                <!-- ArXiv abstract Link -->
+                                <span class="link-block">
+                                    <a href="#" target="_blank"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv (coming soon)</span>
+                                    </a>
+                                </span>
+
+                                <span class="link-block">
+                                    <a href="#" target="_blank"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span>⚔️ GenAI-Arena (coming soon)</span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h2 class="title is-3 has-text-centered">Creative Task Definitions</h2>
+                        <div class="columns is-centered is-multiline">
+                            <!-- Task 1 -->
+                            <div class="column is-one-third">
+                                <div class="box">
+                                    <h3 class="title is-5">Package Rendering</h3>
+                                    <p>
+                                        <strong>Input:</strong> Concept image of product appearance before
+                                        rendering.<br>
+                                        <strong>Output:</strong> Realistic 3D rendered image in specific environments.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Task 2 -->
+                            <div class="column is-one-third">
+                                <div class="box">
+                                    <h3 class="title is-5">Storyboard Creation</h3>
+                                    <p>
+                                        <strong>Input:</strong> Character definition image or scene definition image<br>
+                                        <strong>Output:</strong> Sequential images that illustrate the storyline.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Task 3 -->
+                            <div class="column is-one-third">
+                                <div class="box">
+                                    <h3 class="title is-5">Dynamic Character Design</h3>
+                                    <p>
+                                        <strong>Input:</strong> Text description of character traits.<br>
+                                        <strong>Output:</strong> Animated character with multiple poses or expressions.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Task 4 -->
+                            <div class="column is-one-third">
+                                <div class="box">
+                                    <h3 class="title is-5">Layer Decomposition</h3>
+                                    <p>
+                                        <strong>Input:</strong> A single composite image and detailed layer description
+                                        (e.g., background, foreground objects).<br>
+                                        <strong>Output:</strong> Multiple images of separated layers that align with the
+                                        requirements.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Task 5 -->
+                            <div class="column is-one-third">
+                                <div class="box">
+                                    <h3 class="title is-5">Product Usage Scenario</h3>
+                                    <p>
+                                        <strong>Input:</strong> An image of a product with textual descriptions of
+                                        potential usage scenarios.<br>
+                                        <strong>Output:</strong> Realistic images that showcase the product in various
+                                        use-case scenarios.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Task 6 -->
+                            <div class="column is-one-third">
+                                <div class="box">
+                                    <h3 class="title is-5">Portrait Retouching</h3>
+                                    <p>
+                                        <strong>Input:</strong> A portrait image and a description of desired retouching
+                                        (e.g., lighting adjustments, skin smoothing, blemish removal).<br>
+                                        <strong>Output:</strong> A professionally retouched image with natural
+                                        enhancements.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="is-italic">Learn more...</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Paper abstract -->
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h2 class="title is-3">Abstract</h2>
+                        <div class="content has-text-justified">
+                            <p>
+                                Real-world design tasks - such as picture book creation, film storyboard development
+                                using character sets, photo retouching, visual effects, and font transfer - are highly
+                                diverse and complex, requiring deep interpretation and extraction of various elements
+                                from instructions, descriptions, and reference images. The resulting images often
+                                implicitly capture key features from references or user inputs, making it challenging to
+                                develop models that can effectively address such varied tasks. While existing visual
+                                generative models can produce high-quality images based on prompts, they face
+                                significant limitations in professional design scenarios that involve varied forms and
+                                multiple inputs and outputs, even when enhanced with adapters like ControlNets and
+                                LoRAs. To address this, we introduce IDEA-Bench, a comprehensive benchmark encompassing
+                                100 real-world design tasks, including rendering, visual effects, storyboarding, picture
+                                books, fonts, style-based, and identity-preserving generation, with 275 test cases to
+                                thoroughly evaluate a model's general-purpose generation capabilities. Notably, even the
+                                best-performing model only achieves 22.48 on IDEA-Bench, while the best general-purpose
+                                model only achieves 6.81. We provide a detailed analysis of these results, highlighting
+                                the inherent challenges and providing actionable directions for improvement.
+                                Additionally, we provide a subset of 18 representative tasks equipped with multimodal
+                                large language model (MLLM)-based auto-evaluation techniques to facilitate rapid model
+                                development and comparison.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End paper abstract -->
+
+    <!-- Image carousel -->
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <div class="item">
+                            <h2 class="title is-3">Construction Pipeline</h2>
+                            <!-- Your image here -->
+                            <img src="static/images/pipeline.png" alt="IDEA-Bench" />
+                            <h2 class="subtitle">
+                                Fig 1: <b>Dataset construction process of IDEA-Bench.</b> We categorize the task
+                                data
+                                from professional design websites and designers based on generative model
+                                capabilities
+                                and assign capability keywords to each category. For each specific task, we design
+                                image
+                                generation prompts and hierarchical evaluation questions. Evaluators then refine
+                                these
+                                evaluation questions on a representative subset.
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End image carousel -->
+
+
+    <script>
+        let currentCardIndex = 0; // 当前卡片索引
+        const cardDisplay = document.querySelector('.card-display');
+        const totalCards = document.querySelectorAll('.scrollable-card').length;
+
+        function changeCard(direction) {
+            currentCardIndex += direction;
+
+            // 循环滚动
+            if (currentCardIndex >= totalCards) {
+                currentCardIndex = 0; // 回到第一个卡片
+            } else if (currentCardIndex < 0) {
+                currentCardIndex = totalCards - 1; // 跳到最后一个卡片
+            }
+
+            // 移动卡片容器
+            const cardWidth = document.querySelector('.scrollable-card').offsetWidth; // 获取单个卡片宽度
+            cardDisplay.style.transform = `translateX(-${currentCardIndex * cardWidth}px)`;
+        }
+
+
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom, null, {
+            renderer: 'svg'
+        });
+        var option;
+
+        var data = [
+            {
+                name: 'Multi-image to Image',
+                itemStyle: {
+                    color: '#f0b008' // 森林绿
+                },
+                label: {
+                    // 添加 label 属性以更改文本样式
+                    show: true,
+                    color: '#FFFFFF', // 文本颜色（例如白色）
+                    fontSize: 12, // 字体大小（根据需求调整）
+                    fontWeight: 'bold' // 可选：字体粗细
+                },
+                children: [
+                    {
+                        name: '3D Effect Generation',
+                        itemStyle: {
+                            color: '#fef0cb' // 海洋绿
+                        },
+                        children: [
+                            {
+                                name: 'Single Reference',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#fdf0cb' // 草地绿
+                                }
+                            },
+                            {
+                                name: 'Three View Reference',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#fadb9f' // 中等海洋绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Human Attribute Editing',
+                        itemStyle: {
+                            color: '#e9c692' // 保持不变（假设这是绿色或接近绿色的颜色）
+                        },
+                        children: [
+                            {
+                                name: 'Age Transformation',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#e9c692' // 森林绿
+                                }
+                            },
+                            {
+                                name: 'Clothes Transformation',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#eac898F' // 暗橄榄绿
+                                }
+                            },
+                            {
+                                name: 'Hairstyle Transformation',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#eab37f' // 中等海洋绿
+                                }
+                            },
+                            {
+                                name: 'Pose Transformation',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#efae70' // 海洋绿
+                                }
+                            },
+                            {
+                                name: 'Sex Transformation',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#f0ad5b' // 草地绿
+                                }
+                            },
+                            {
+                                name: 'Tattoo Generation',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#eda145' // 中等海洋绿
+                                }
+                            },
+                            {
+                                name: 'Body Painting',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#e88c07' // 海洋绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Image Blending',
+                        itemStyle: {
+                            color: '#f0ad5b' // 中等海洋绿
+                        },
+                        children: [
+                            {
+                                name: 'Artist Collage',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#e06440' // 暗橄榄绿
+                                }
+                            },
+                            {
+                                name: 'Double Exposure',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#de5637' // 浅绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Image Transfer',
+                        itemStyle: {
+                            color: '#e88c07' // 暗橄榄绿
+                        },
+                        children: [
+                            {
+                                name: 'Digital Makeup',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#d95504' // 中等海洋绿
+                                }
+                            },
+                            {
+                                name: 'ID Transfer',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#da4934' // 森林绿
+                                }
+                            },
+                            {
+                                name: 'Light Transfer',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#d83f08' // 草地绿
+                                }
+                            },
+                            {
+                                name: 'Posture Transfer',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#ab4121' // 海洋绿
+                                }
+                            },
+                            {
+                                name: 'Style Transfer',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#a43e2e' // 浅绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Text Editing',
+                        itemStyle: {
+                            color: '#dd6606' // 中等海洋绿
+                        },
+                        children: [
+                            {
+                                name: 'Text Insertion',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#983c30' // 海洋绿
+                                }
+                            },
+                            {
+                                name: 'Text Modification',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#883938' // 浅绿
+                                }
+                            },
+                            {
+                                name: 'Text Removal',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#673019' // 森林绿
+                                }
+                            },
+                            {
+                                name: 'Text Style Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#642508' // 草地绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Panorama Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#c55530' // 森林绿
+                        }
+                    },
+                    {
+                        name: 'Special Effect Adding',
+                        value: 1,
+                        itemStyle: {
+                            color: '#aa4221' // 浅绿
+                        }
+                    }
+                ]
+            },
+            {
+                name: 'Text to Multi-image',
+                itemStyle: {
+                    color: '#ca0018'
+                },
+                label: {
+                    // 添加 label 属性以更改文本样式
+                    show: true,
+                    color: '#FFFFFF', // 文本颜色（例如白色）
+                    fontSize: 12, // 字体大小（根据需求调整）
+                    fontWeight: 'bold' // 可选：字体粗细
+                },
+                children: [
+                    {
+                        name: 'Animal Growth Process Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#883938'
+                        }
+                    },
+                    {
+                        name: 'Plant Growth Process Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#983c30'
+                        }
+                    },
+                    {
+                        name: 'Concept Visualization',
+                        value: 1,
+                        itemStyle: {
+                            color: '#a94132'
+                        }
+                    },
+                    {
+                        name: 'Couple Icon Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#d2472b'
+                        }
+                    },
+                    {
+                        name: 'Drawing Process Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#d83f08'
+                        }
+                    },
+                    {
+                        name: 'Dynamic Character Design',
+                        itemStyle: {
+                            color: '#d31e25'
+                        },
+                        children: [
+                            {
+                                name: 'Expression Design',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#8e0e39'
+                                }
+                            },
+                            {
+                                name: 'Pose Design',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#8b2c37'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Historical Narrative Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#ca0018'
+                        }
+                    },
+                    {
+                        name: 'Movie Shots Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#cd002c'
+                        }
+                    },
+                    {
+                        name: 'Childrens Book Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#bf3e61'
+                        }
+                    },
+                    {
+                        name: 'Physical Laws Illustration',
+                        value: 1,
+                        itemStyle: {
+                            color: '#d83759'
+                        }
+                    },
+                    {
+                        name: 'Style Group Generation',
+                        itemStyle: {
+                            color: '#d83661'
+                        },
+                        children: [
+                            {
+                                name: 'Abstract',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#bf3e61'
+                                }
+                            },
+                            {
+                                name: 'Anime',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#d8365f'
+                                }
+                            },
+                            {
+                                name: 'Creative',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#de5266'
+                                }
+                            },
+                            {
+                                name: 'Cthulhu',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#e16972'
+                                }
+                            },
+                            {
+                                name: 'Cyberpunk',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#e37981'
+                                }
+                            },
+                            {
+                                name: 'Comic',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#e78d97'
+                                }
+                            },
+                            {
+                                name: 'Oil Painting',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#e78d97'
+                                }
+                            },
+                            {
+                                name: 'Pixel Art',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#eda0aa'
+                                }
+                            },
+                            {
+                                name: 'Sketch',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#f0b1ad'
+                                }
+                            },
+                            {
+                                name: 'Woodcut',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#dec9cb'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'Text to \n Image',
+                itemStyle: {
+                    color: '#78338a'
+                },
+                label: {
+                    // 添加 label 属性以更改文本样式
+                    show: true,
+                    color: '#FFFFFF', // 文本颜色（例如白色）
+                    fontSize: 12, // 字体大小（根据需求调整）
+                    fontWeight: 'bold' // 可选：字体粗细
+                },
+                children: [
+                    {
+                        name: 'Poster Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#b6376d'
+                        }
+                    },
+                    {
+                        name: 'Architectural Style Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#90435b'
+                        }
+                    },
+                    {
+                        name: 'Game UI Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#814a78'
+                        }
+                    },
+                    {
+                        name: 'Business Card Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#78497d'
+                        }
+                    },
+                    {
+                        name: 'Information Chart Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#67418b'
+                        }
+                    },
+                    {
+                        name: 'Interior Design Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#5b2e88'
+                        }
+                    },
+                    {
+                        name: 'Landmark Building Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#562080'
+                        }
+                    },
+                    {
+                        name: 'LOGO Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#4c4394'
+                        }
+                    },
+                    {
+                        name: 'Painting Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#4a4494'
+                        }
+                    },
+                    {
+                        name: 'Sculpture Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#464aa1'
+                        }
+                    },
+                    {
+                        name: 'Ticket Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#3b55a1'
+                        }
+                    }
+                ]
+            },
+            {
+                name: '(Multi-)image to \n Multi-image',
+                itemStyle: {
+                    color: '#0c77b0'
+                },
+                label: {
+                    // 添加 label 属性以更改文本样式
+                    show: true,
+                    color: '#FFFFFF', // 文本颜色（例如白色）
+                    fontSize: 12, // 字体大小（根据需求调整）
+                    fontWeight: 'bold' // 可选：字体粗细
+                },
+                children: [
+                    {
+                        name: 'Animal Growth Process Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#465fa6'
+                        }
+                    },
+                    {
+                        name: 'Plant Growth Process Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#1f4794'
+                        }
+                    },
+                    {
+                        name: 'Real and Anime Interaction',
+                        value: 3,
+                        itemStyle: {
+                            color: '#234480'
+                        },
+                        children: [
+                            {
+                                name: 'Mixed Portrait',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#3c9cd3'
+                                }
+                            },
+                            {
+                                name: 'Anime Background',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#85bfe7'
+                                }
+                            },
+                            {
+                                name: 'Anime Charcter',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#161440'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Childrens Book Generation',
+                        itemStyle: {
+                            color: '#26416c'
+                        },
+                        children: [
+                            {
+                                name: 'Role Definition',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#5078b8'
+                                }
+                            },
+                            {
+                                name: 'Scenario Definition',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#26416c'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Creativity Transfer',
+                        value: 1,
+                        itemStyle: {
+                            color: '#273665'
+                        }
+                    },
+                    {
+                        name: 'Layer Decomposition',
+                        value: 1,
+                        itemStyle: {
+                            color: '#223162'
+                        }
+                    },
+                    {
+                        name: 'Lighting Effect Simulation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#192953'
+                        }
+                    },
+                    {
+                        name: 'Movie Shots Generation',
+                        itemStyle: {
+                            color: '#111d45'
+                        },
+                        children: [
+                            {
+                                name: 'Role Definition',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#7fcdcc'
+                                }
+                            },
+                            {
+                                name: 'Scenario Definition',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#b8e1e3'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Appearance Variants',
+                        value: 1,
+                        itemStyle: {
+                            color: '#161440'
+                        }
+                    },
+                    {
+                        name: 'Interior Decoration Variants',
+                        value: 1,
+                        itemStyle: {
+                            color: '#192953'
+                        }
+                    },
+                    {
+                        name: 'Multi View Transformation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#26416c'
+                        }
+                    },
+                    {
+                        name: 'Paintings Undo',
+                        itemStyle: {
+                            color: '#0c77b0'
+                        },
+                        children: [
+                            {
+                                name: 'From Finished Work',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#9cd8d8'
+                                }
+                            },
+                            {
+                                name: 'From Semi-Finished Work',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#bce3e3'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Product Usage Scenario',
+                        value: 1,
+                        itemStyle: {
+                            color: '#3c9cd3'
+                        }
+                    },
+                    {
+                        name: 'Same Pose Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#34a7d9'
+                        }
+                    },
+                    {
+                        name: 'Stop Motion Animation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#85bfe7'
+                        }
+                    },
+                    {
+                        name: 'Three View Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#9cd8d8'
+                        }
+                    }
+                ]
+            },
+            {
+                name: 'Image to Image',
+                itemStyle: {
+                    color: '#64c385' // 天苍苍，野茫茫，脆皮年糕淀粉肠，芝士蛋糕烤红薯，芋泥虎皮牛奶糖。
+                },
+                label: {
+                    // 添加 label 属性以更改文本样式
+                    show: true,
+                    color: '#FFFFFF', // 文本颜色（例如白色）
+                    fontSize: 12, // 字体大小（根据需求调整）
+                    fontWeight: 'bold' // 可选：字体粗细
+                },
+                children: [
+                    {
+                        name: 'Animal Attribute Editing',
+                        itemStyle: {
+                            color: '#0daa8e' // 左牵黄，右擎苍，炸串砂锅麻辣烫，肥牛焖饭卤千张。
+                        },
+                        children: [
+                            {
+                                name: 'Hair Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#3bbc7a' // 不思量，自难忘，流心曲奇桂花酿，烧腊烤鸭咖喱饭，绿豆冰糕咸蛋黄。
+                                }
+                            },
+                            {
+                                name: 'Posture Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#0eaa76' // 森林绿
+                                }
+                            },
+                            {
+                                name: 'Species Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#2d5847' // 海洋绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Couple Icon Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#0eab74' // 草地绿
+                        }
+                    },
+                    {
+                        name: 'ID Photo Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#096f44' // 森林绿
+                        }
+                    },
+                    {
+                        name: 'Image Completion',
+                        value: 1,
+                        itemStyle: {
+                            color: '#415046' // 海洋绿
+                        }
+                    },
+                    {
+                        name: 'Image Retouching',
+                        itemStyle: {
+                            color: '#2d5847' // 中等海洋绿
+                        },
+                        children: [
+                            {
+                                name: 'Portrait Photo',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#78bfa2' // 浅绿
+                                }
+                            },
+                            {
+                                name: 'Landscape Photo',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#7abf9c' // 森林绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Image Straighten',
+                        itemStyle: {
+                            color: '#397557' // 森林绿
+                        },
+                        children: [
+                            {
+                                name: 'Clipping Straighten',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#89b0a1' // 海洋绿
+                                }
+                            },
+                            {
+                                name: 'Completing Straighten',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#b7d0c3' // 草地绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Lighting Editing',
+                        value: 1,
+                        itemStyle: {
+                            color: '#448755' // 森林绿
+                        }
+                    },
+                    {
+                        name: 'Local Enlargement',
+                        value: 1,
+                        itemStyle: {
+                            color: '#64b46e' // 海洋绿
+                        }
+                    },
+                    {
+                        name: 'Image Blur',
+                        itemStyle: {
+                            color: '#83d277' // 草地绿
+                        },
+                        children: [
+                            {
+                                name: 'Filed Blur',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#92e184' // 中等海洋绿
+                                }
+                            },
+                            {
+                                name: 'Motion Blur',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#83d277' // 暗橄榄绿
+                                }
+                            },
+                            {
+                                name: 'Rotation Blur',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#64b46e' // 森林绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Object Editing',
+                        itemStyle: {
+                            color: '#92e184' // 中等海洋绿
+                        },
+                        children: [
+                            {
+                                name: 'Background Changing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#415046' // 暗橄榄绿
+                                }
+                            },
+                            {
+                                name: 'Object Adding',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#355449' // 浅绿
+                                }
+                            },
+                            {
+                                name: 'Object Removal',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#2d5847' // 森林绿
+                                }
+                            },
+                            {
+                                name: 'Object Replacing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#397557' // 保持不变（已经是绿色）
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Packaging Rendering',
+                        value: 1,
+                        itemStyle: {
+                            color: '#a3dd95' // 森林绿
+                        }
+                    },
+                    {
+                        name: 'Style Editing',
+                        itemStyle: {
+                            color: '#b4dfa5' // 中等海洋绿
+                        },
+                        children: [
+                            {
+                                name: 'Art Style Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#60801c' // 海洋绿
+                                }
+                            },
+                            {
+                                name: 'Era Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#71893d' // 森林绿
+                                }
+                            },
+                            {
+                                name: 'Material Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#8fab49' // 暗橄榄绿
+                                }
+                            },
+                            {
+                                name: 'Time Editing',
+                                value: 1,
+                                itemStyle: {
+                                    color: '#c0e263' // 草地绿
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Brand Merchandise Generation',
+                        value: 1,
+                        itemStyle: {
+                            color: '#d3ebc5' // 暗橄榄绿
+                        }
+                    }
+                ]
+            }
+        ];
+        option = {
+            title: {
+                textStyle: {
+                    fontSize: 8,
+                    align: 'center'
+                },
+                subtextStyle: {
+                    align: 'center'
+                },
+                sublink: 'https://worldcoffeeresearch.org/work/sensory-lexicon/'
+            },
+            series: {
+                type: 'sunburst',
+                data: data,
+                label: {
+                    fontSize: 8,
+                    fontWeight: 'bold'
+                },
+                radius: [0, '95%'],
+                sort: undefined,
+                emphasis: {
+                    focus: 'ancestor'
+                },
+                levels: [
+                    {},
+                    {
+                        r0: '15%',
+                        r: '35%',
+                        itemStyle: {
+                            borderWidth: 2
+                        },
+                        label: {
+                            rotate: 'tangential'
+                        }
+                    },
+                    {
+                        r0: '35%',
+                        r: '70%',
+                        label: {
+                            align: 'right'
+                        }
+                    },
+                    {
+                        r0: '70%',
+                        r: '72%',
+                        label: {
+                            position: 'outside',
+                            padding: 3,
+                            silent: false
+                        },
+                        itemStyle: {
+                            borderWidth: 3
+                        }
+                    }
+                ]
+            }
+        };
+
+        option && myChart.setOption(option);
+    </script>
+
+    <!-- Image carousel -->
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column is-full">
+                        <div class="item">
+                            <!-- Your image here -->
+                            <img src="static/images/prompt_length.png" alt="IDEA-Bench" />
+                            <h2 class="subtitle">
+                                Fig 2: <b>Statistics of prompt lengths for all tasks in IDEA-Bench.</b> Each of the
+                                five
+                                task categories is represented by a distinct color. Prompt lengths are divided into
+                                five
+                                intervals, and the y-axis shows the number of tasks that fall within each interval.
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End image carousel -->
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column is-full">
+                        <div class="item" style="text-align: center;">
+                            <!-- Your image here -->
+                            <img src="static/images/eval_dimension.png" alt="IDEA-Bench"
+                                style="max-width: 70%; height: auto;" />
+                            <h2 class="subtitle">
+                                Fig 3: <b>Statistics of evaluation dimensions for all tasks in IDEA-Bench.</b> Each
+                                of
+                                the five task categories is represented by a distinct color. A total of 12
+                                evaluation
+                                dimensions are analyzed, with the radar chart values indicating the proportion of
+                                evaluation questions related to each dimension within each category.
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <!-- Evaluation Section -->
+                <div class="content">
+                    <h2 class="title is-3 has-text-centered">Evaluation</h2>
+
+                    <h3 class="title is-4 has-text-centered">Human Evaluation</h3>
+                    <p>
+                        The evaluation process for IDEA-Bench includes a rigorous human scoring system. Each case is
+                        assessed based on the corresponding evaluation questions, which contains six binary evaluation
+                        questions, each with clearly defined 0-point and 1-point standards. The scoring process follows
+                        a hierarchical structure:
+                    </p>
+                    <ol>
+                        <li>
+                            <strong>Hierarchical Scoring:</strong>
+                            <ul>
+                                <li>If either Question 1 or Question 2 receives a score of 0, the remaining four
+                                    questions (Questions 3–6) are automatically scored as 0.</li>
+                                <li>Similarly, if either Question 3 or Question 4 receives a score of 0, the last two
+                                    questions (Questions 5 and 6) are scored as 0.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Task-Level Scores:</strong>
+                            Scores for cases sharing the same task ID are averaged to calculate the task score.
+                        </li>
+                        <li>
+                            <strong>Category and Final Scores:</strong>
+                            <ul>
+                                <li>Certain tasks are grouped under professional-level categories.</li>
+                                <li>Final scores for the five major categories are obtained by averaging the task scores
+                                    within each category.</li>
+                                <li>The overall model score is computed as the average of the five major category
+                                    scores.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p>
+                        Scripts for score computation will be provided soon to streamline this process.
+                    </p>
+
+                    <h3 class="title is-4 has-text-centered">MLLM Evaluation</h3>
+                    <p>
+                        The automated evaluation leverages multimodal large language models (MLLMs) to assess a subset
+                        of cases equipped with finely tuned prompts. These prompts have been meticulously refined by
+                        annotators to ensure detailed and accurate assessments. MLLMs evaluate the model outputs by
+                        interpreting the detailed questions and criteria provided in these prompts.
+                    </p>
+                    <p>
+                        Further details about the MLLM evaluation process can be found in the <a
+                            href="https://github.com/ali-vilab/IDEA-Bench" target="_blank">IDEA-Bench GitHub
+                            repository</a>. The repository includes additional resources and instructions for
+                        implementing automated evaluations.
+                    </p>
+                    <p>
+                        These two complementary evaluation methods ensure that IDEA-Bench provides a comprehensive
+                        framework for assessing both human-aligned quality and automated model performance in
+                        professional-grade image generation tasks.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="hero is-small">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                    <div class="column is-full">
+                        <h2 class="title is-3">Automated Evaluation Leaderboard</h2>
+                        <p class="subtitle">
+                            Task types that a model cannot support are marked with "--" and are treated as 0 points
+                            in the average score calculation.
+                        </p>
+                        <div class="table-container">
+                            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Method</th>
+                                        <th rowspan="2">CLIPScore</th>
+                                        <th colspan="5">Scores on All Categories</th>
+                                        <th rowspan="2">Avg. Score</th>
+                                    </tr>
+                                    <tr>
+                                        <th>T2I</th>
+                                        <th>I2I</th>
+                                        <th>Is2I</th>
+                                        <th>T2Is</th>
+                                        <th>I(s)2Is</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color: rgb(132, 132, 132);">FLUX-1 + GPT-4o</td>
+                                        <td>0.3432</td>
+                                        <td>83.33</td>
+                                        <td>28.71</td>
+                                        <td>4.86</td>
+                                        <td>32.29</td>
+                                        <td>37.50</td>
+                                        <td><strong>37.48</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: rgb(132, 132, 132);">DALL-E 3 + GPT-4o</td>
+                                        <td>0.3462</td>
+                                        <td>55.56</td>
+                                        <td>27.78</td>
+                                        <td>20.37</td>
+                                        <td>29.17</td>
+                                        <td>29.17</td>
+                                        <td>32.41</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: rgb(132, 132, 132);">Pixart + GPT-4o</td>
+                                        <td>0.3435</td>
+                                        <td>26.30</td>
+                                        <td>30.55</td>
+                                        <td>29.86</td>
+                                        <td>35.42</td>
+                                        <td>31.25</td>
+                                        <td>30.68</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: rgb(132, 132, 132);">SD3 + GPT-4o</td>
+                                        <td><strong>0.3483</strong></td>
+                                        <td>56.30</td>
+                                        <td>23.61</td>
+                                        <td>5.55</td>
+                                        <td>32.29</td>
+                                        <td>31.25</td>
+                                        <td>29.80</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Emu2</b></td>
+                                        <td>0.1821</td>
+                                        <td>35.80</td>
+                                        <td>43.52</td>
+                                        <td>34.72</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>22.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>OmniGen</b></td>
+                                        <td>0.1799</td>
+                                        <td>46.30</td>
+                                        <td>40.27</td>
+                                        <td>25.46</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>22.41</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>MagicBrush</b></td>
+                                        <td>0.1212</td>
+                                        <td>--</td>
+                                        <td>9.72</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>1.94</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>InstructPix2Pix</b></td>
+                                        <td>0.1194</td>
+                                        <td>--</td>
+                                        <td>27.78</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>5.56</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero is-small">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                    <div class="column is-full">
+                        <h2 class="title is-3">Overall Results (Human Rating)</h2>
+                        <p class="subtitle">
+                            Each task category is averaged across all its subtasks, with the top-ranked model scores
+                            for
+                            each task type highlighted in <strong>bold</strong>.
+                            Task types that a model cannot support are marked with "--" and are treated as 0 points
+                            in
+                            the average score calculation.
+                            "<sup>†</sup>" represents the use of MLLM for prompt rephrasing.
+                        </p>
+                        <div class="table-container">
+                            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Method</th>
+                                        <th rowspan="2">Param.</th>
+                                        <th colspan="5">Scores on All Categories</th>
+                                        <th rowspan="2">Avg. Score</th>
+                                    </tr>
+                                    <tr>
+                                        <th>T2I</th>
+                                        <th>I2I</th>
+                                        <th>Is2I</th>
+                                        <th>T2Is</th>
+                                        <th>I(s)2Is</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="has-background-light">
+                                        <td style="color: rgb(132, 132, 132);">FLUX-1 + GPT-4o</td>
+                                        <td>12B</td>
+                                        <td><strong>46.06</strong></td>
+                                        <td>12.13</td>
+                                        <td>4.89</td>
+                                        <td>20.15</td>
+                                        <td><strong>29.17</strong></td>
+                                        <td><strong>22.48</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: rgb(132, 132, 132);">SD3 + GPT-4o</td>
+                                        <td>2B</td>
+                                        <td>24.04</td>
+                                        <td>10.79</td>
+                                        <td>4.69</td>
+                                        <td><strong>21.59</strong></td>
+                                        <td>13.06</td>
+                                        <td>14.83</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: rgb(132, 132, 132);">DALL-E 3 + GPT-4o</td>
+                                        <td>12B</td>
+                                        <td>24.34</td>
+                                        <td>6.95</td>
+                                        <td>5.27</td>
+                                        <td>14.36</td>
+                                        <td>14.44</td>
+                                        <td>13.07</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: rgb(132, 132, 132);">Pixart + GPT-4o</td>
+                                        <td>0.6B</td>
+                                        <td>14.44</td>
+                                        <td>7.75</td>
+                                        <td>3.48</td>
+                                        <td>17.46</td>
+                                        <td>21.39</td>
+                                        <td>12.90</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Emu2</b></td>
+                                        <td>37B</td>
+                                        <td>17.98</td>
+                                        <td>7.05</td>
+                                        <td><strong>8.98</strong></td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>6.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>OmniGen</b></td>
+                                        <td>3.8B</td>
+                                        <td>21.41</td>
+                                        <td>8.17</td>
+                                        <td>2.77</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>6.47</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>MagicBrush</b></td>
+                                        <td>1B</td>
+                                        <td>--</td>
+                                        <td><strong>19.07</strong></td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>3.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>InstructPix2Pix</b></td>
+                                        <td>1B</td>
+                                        <td>--</td>
+                                        <td>17.58</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>3.52</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Anole</b></td>
+                                        <td>7B</td>
+                                        <td>0.00</td>
+                                        <td>0.64</td>
+                                        <td>0.00</td>
+                                        <td>1.74</td>
+                                        <td>0.00</td>
+                                        <td>0.48</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Results on Each Category</h2>
+                    <div class="content has-text-justified">
+                        <div class="box m-5">
+                            <div id="results-carousel" class="carousel results-carousel">
+                                <!-- Table 1 -->
+                                <div class="table-container scrollable-table-container">
+                                    <h5 class="title is-5 has-text-centered">Text-to-Image</h5>
+                                    <table
+                                        class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">Method</th>
+                                                <th colspan="11">Subtasks Score</th>
+                                                <th rowspan="2">Avg. Score</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Arch. Style</th>
+                                                <th>Bus. Card</th>
+                                                <th>Game UI</th>
+                                                <th>Inf. Chart</th>
+                                                <th>Int.</th>
+                                                <th>Paint.</th>
+                                                <th>Sculp.</th>
+                                                <th>Ticket</th>
+                                                <th>Land.</th>
+                                                <th>LOGO</th>
+                                                <th>Poster</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="has-background-light">
+                                                <td>FLUX-1</td>
+                                                <td><strong>100.00</strong></td>
+                                                <td><strong>38.89</strong></td>
+                                                <td><strong>5.56</strong></td>
+                                                <td>0.00</td>
+                                                <td><strong>66.67</strong></td>
+                                                <td>61.11</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td><strong>16.67</strong></td>
+                                                <td><strong>83.33</strong></td>
+                                                <td><strong>61.11</strong></td>
+                                                <td><strong>56.67</strong></td>
+                                                <td><strong>46.06</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>DALL-E 3</td>
+                                                <td>22.22</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>11.11</td>
+                                                <td><strong>100.00</strong></td>
+                                                <td>11.11</td>
+                                                <td>0.00</td>
+                                                <td>38.89</td>
+                                                <td><strong>61.11</strong></td>
+                                                <td>23.33</td>
+                                                <td>24.34</td>
+                                            </tr>
+                                            <tr>
+                                                <td>SD3</td>
+                                                <td>38.89</td>
+                                                <td>0.00</td>
+                                                <td><strong>5.56</strong></td>
+                                                <td>0.00</td>
+                                                <td>50.00</td>
+                                                <td>5.56</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td>0.00</td>
+                                                <td>50.00</td>
+                                                <td><strong>61.11</strong></td>
+                                                <td>36.67</td>
+                                                <td>24.04</td>
+                                            </tr>
+                                            <tr class="has-background-light">
+                                                <td>Pixart</td>
+                                                <td>5.56</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>22.22</td>
+                                                <td>33.33</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td>0.00</td>
+                                                <td>22.22</td>
+                                                <td>22.22</td>
+                                                <td>36.67</td>
+                                                <td>14.44</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Anole</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                            </tr>
+                                            <tr class="has-background-light">
+                                                <td>Emu2</td>
+                                                <td>22.22</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>38.89</td>
+                                                <td>38.89</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td>0.00</td>
+                                                <td>44.44</td>
+                                                <td>16.67</td>
+                                                <td>20.00</td>
+                                                <td>17.98</td>
+                                            </tr>
+                                            <tr>
+                                                <td>OmniGen</td>
+                                                <td>38.89</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>27.78</td>
+                                                <td>50.00</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td>0.00</td>
+                                                <td>38.89</td>
+                                                <td>33.33</td>
+                                                <td>30.00</td>
+                                                <td>21.41</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Table 2 -->
+                                <div class="table-container scrollable-table-container">
+                                    <h5 class="title is-5 has-text-centered">Image-to-Image</h5>
+                                    <table
+                                        class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">Method</th>
+                                                <th colspan="13">Subtasks Score</th>
+                                                <th rowspan="2">Avg. Score</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Anim. Attr.</th>
+                                                <th>Coup. Icon</th>
+                                                <th>ID Photo</th>
+                                                <th>Blur</th>
+                                                <th>Compl.</th>
+                                                <th>Ret.</th>
+                                                <th>Str.</th>
+                                                <th>Light.</th>
+                                                <th>Enl.</th>
+                                                <th>Obj. Edit</th>
+                                                <th>Pack. Rend.</th>
+                                                <th>Style Edit</th>
+                                                <th>Brand Merch.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">FLUX-1<sup>†</sup></td>
+                                                <td>0.00</td>
+                                                <td>16.67</td>
+                                                <td>0.00</td>
+                                                <td>2.78</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>12.50</td>
+                                                <td>0.00</td>
+                                                <td><strong>100.00</strong></td>
+                                                <td>6.25</td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>11.11</td>
+                                                <td>12.13</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">DALL-E 3<sup>†</sup></td>
+                                                <td>5.56</td>
+                                                <td>11.11</td>
+                                                <td>0.00</td>
+                                                <td>2.78</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>38.89</td>
+                                                <td>4.17</td>
+                                                <td>8.33</td>
+                                                <td>4.17</td>
+                                                <td>11.11</td>
+                                                <td>6.95</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">SD3<sup>†</sup></td>
+                                                <td>8.33</td>
+                                                <td>27.78</td>
+                                                <td>0.00</td>
+                                                <td>2.78</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>55.56</td>
+                                                <td>4.17</td>
+                                                <td>8.33</td>
+                                                <td>4.17</td>
+                                                <td>16.67</td>
+                                                <td>10.79</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">Pixart<sup>†</sup></td>
+                                                <td>5.56</td>
+                                                <td><strong>55.56</strong></td>
+                                                <td>4.17</td>
+                                                <td>2.78</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>11.11</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>2.08</td>
+                                                <td>11.11</td>
+                                                <td>7.75</td>
+                                            </tr>
+                                            <tr>
+                                                <td>InstructPix2Pix</td>
+                                                <td><strong>44.44</strong></td>
+                                                <td>16.67</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td>13.89</td>
+                                                <td><strong>25.00</strong></td>
+                                                <td><strong>54.17</strong></td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>10.42</td>
+                                                <td><strong>25.00</strong></td>
+                                                <td>16.67</td>
+                                                <td>5.56</td>
+                                                <td>17.58</td>
+                                            </tr>
+                                            <tr class="has-background-light">
+                                                <td>MagicBrush</td>
+                                                <td>33.33</td>
+                                                <td>16.67</td>
+                                                <td>12.50</td>
+                                                <td><strong>25.00</strong></td>
+                                                <td><strong>25.00</strong></td>
+                                                <td>41.67</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td><strong>35.42</strong></td>
+                                                <td>8.33</td>
+                                                <td><strong>33.33</strong></td>
+                                                <td>16.67</td>
+                                                <td><strong>19.07</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Anole</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.64</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Emu2</td>
+                                                <td>11.11</td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>5.56</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td><strong>20.83</strong></td>
+                                                <td>0.00</td>
+                                                <td>16.67</td>
+                                                <td>4.17</td>
+                                                <td>8.33</td>
+                                                <td>4.17</td>
+                                                <td>16.67</td>
+                                                <td>7.05</td>
+                                            </tr>
+                                            <tr>
+                                                <td>OmniGen</td>
+                                                <td>16.67</td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>5.56</td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>16.67</td>
+                                                <td>0.00</td>
+                                                <td>10.42</td>
+                                                <td><strong>44.44</strong></td>
+                                                <td>8.17</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Table 3 -->
+                                <div class="table-container scrollable-table-container">
+                                    <h5 class="title is-5 has-text-centered">Images-to-Image</h5>
+                                    <table
+                                        class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
+                                        <thead>
+                                            <tr class="has-background-grey-lighter">
+                                                <th rowspan="2">Method</th>
+                                                <th colspan="8">Subtasks Score</th>
+                                                <th rowspan="2">Avg. Score</th>
+                                            </tr>
+                                            <tr class="has-background-grey-lighter">
+                                                <th>Human Attr.</th>
+                                                <th>Image Trans.</th>
+                                                <th>Pan.</th>
+                                                <th>Text Edit.</th>
+                                                <th>3D. Effect</th>
+                                                <th>Image Blend.</th>
+                                                <th>Spec. Effect</th>
+                                                <th>Real and Anime</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">FLUX-1<sup>†</sup></td>
+                                                <td>3.97</td>
+                                                <td><strong>6.67</strong></td>
+                                                <td>0.00</td>
+                                                <td><strong>10.42</strong></td>
+                                                <td>0.00</td>
+                                                <td><strong>12.50</strong></td>
+                                                <td>0.00</td>
+                                                <td>5.56</td>
+                                                <td>4.89</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">DALL-E 3<sup>†</sup></td>
+                                                <td>4.76</td>
+                                                <td>3.33</td>
+                                                <td>8.33</td>
+                                                <td>6.25</td>
+                                                <td>0.00</td>
+                                                <td>8.33</td>
+                                                <td>5.56</td>
+                                                <td>5.56</td>
+                                                <td>5.27</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">SD3<sup>†</sup></td>
+                                                <td>4.76</td>
+                                                <td>5.00</td>
+                                                <td>0.00</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>8.33</td>
+                                                <td>5.56</td>
+                                                <td>5.56</td>
+                                                <td>4.69</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">Pixart<sup>†</sup></td>
+                                                <td>4.76</td>
+                                                <td>5.00</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>5.56</td>
+                                                <td>3.48</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Anole</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                            </tr>
+                                            <tr class="has-background-light">
+                                                <td>Emu2</td>
+                                                <td><strong>6.35</strong></td>
+                                                <td>0.00</td>
+                                                <td><strong>50.00</strong></td>
+                                                <td>2.08</td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td><strong>9.26</strong></td>
+                                                <td><strong>8.98</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>OmniGen</td>
+                                                <td>1.59</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>2.08</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td><strong>11.11</strong></td>
+                                                <td>7.41</td>
+                                                <td>2.77</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Table 4 -->
+                                <div class="table-container scrollable-table-container">
+                                    <h5 class="title is-5 has-text-centered">Text-to-Images</h5>
+                                    <table
+                                        class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">Method</th>
+                                                <th colspan="11">Subtasks Score</th>
+                                                <th rowspan="2">Avg. Score</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Anim. Grow.</th>
+                                                <th>Child. Book</th>
+                                                <th>Draw. Proc.</th>
+                                                <th>Hist. Narr.</th>
+                                                <th>Movie Shots</th>
+                                                <th>Phys. Laws</th>
+                                                <th>Plant Grow.</th>
+                                                <th>Style Group</th>
+                                                <th>Conc. Vis.</th>
+                                                <th>Coup. Icon</th>
+                                                <th>Dyn. Char.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">FLUX-1<sup>†</sup></td>
+                                                <td>25.00</td>
+                                                <td><strong>4.17</strong></td>
+                                                <td>8.33</td>
+                                                <td><strong>70.83</strong></td>
+                                                <td>4.17</td>
+                                                <td>4.17</td>
+                                                <td>8.33</td>
+                                                <td>7.08</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td><strong>50.00</strong></td>
+                                                <td><strong>22.92</strong></td>
+                                                <td>20.15</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">DALL-E 3<sup>†</sup></td>
+                                                <td>0.00</td>
+                                                <td><strong>4.17</strong></td>
+                                                <td>0.00</td>
+                                                <td>4.17</td>
+                                                <td>4.17</td>
+                                                <td>0.00</td>
+                                                <td>41.67</td>
+                                                <td><strong>32.92</strong></td>
+                                                <td>12.50</td>
+                                                <td>41.67</td>
+                                                <td>16.67</td>
+                                                <td>14.36</td>
+                                            </tr>
+                                            <tr class="has-background-light">
+                                                <td style="color: rgb(132, 132, 132);">SD3<sup>†</sup></td>
+                                                <td>8.33</td>
+                                                <td><strong>4.17</strong></td>
+                                                <td><strong>25.00</strong></td>
+                                                <td>37.50</td>
+                                                <td><strong>12.50</strong></td>
+                                                <td><strong>8.33</strong></td>
+                                                <td><strong>45.83</strong></td>
+                                                <td>18.75</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td>41.67</td>
+                                                <td>18.75</td>
+                                                <td><strong>21.59</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">Pixart<sup>†</sup></td>
+                                                <td><strong>37.50</strong></td>
+                                                <td><strong>4.17</strong></td>
+                                                <td>4.17</td>
+                                                <td>16.67</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>29.17</td>
+                                                <td>21.25</td>
+                                                <td><strong>16.67</strong></td>
+                                                <td>45.83</td>
+                                                <td>16.67</td>
+                                                <td>17.46</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Anole</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.42</td>
+                                                <td>8.33</td>
+                                                <td>8.33</td>
+                                                <td>2.08</td>
+                                                <td>1.74</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Table 5 -->
+                                <div class="table-container scrollable-table-container">
+                                    <h5 class="title is-5 has-text-centered">Image(s)-to-Images</h5>
+                                    <table
+                                        class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">Method</th>
+                                                <th colspan="15">Subtasks Score</th>
+                                                <th rowspan="2">Avg. Score</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Anim. Grow.</th>
+                                                <th>Creat. Trans.</th>
+                                                <th>Layer Decomp.</th>
+                                                <th>Light. Effect</th>
+                                                <th>Movie Shots</th>
+                                                <th>Multi-app.</th>
+                                                <th>Multi-dec.</th>
+                                                <th>Multi-view Trans.</th>
+                                                <th>Paint. Undo</th>
+                                                <th>Same Pose</th>
+                                                <th>Three-view Trans.</th>
+                                                <th>Child. Book</th>
+                                                <th>Plant Growth</th>
+                                                <th>Prod. Usage Scen.</th>
+                                                <th>Stop-motion Anim.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="has-background-light">
+                                                <td style="color: rgb(132, 132, 132);">FLUX-1<sup>†</sup></td>
+                                                <td>25.00</td>
+                                                <td><strong>66.67</strong></td>
+                                                <td><strong>75.00</strong></td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>16.67</td>
+                                                <td><strong>100.00</strong></td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td><strong>45.83</strong></td>
+                                                <td>41.67</td>
+                                                <td><strong>33.33</strong></td>
+                                                <td><strong>25.00</strong></td>
+                                                <td><strong>29.17</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">DALL-E 3<sup>†</sup></td>
+                                                <td>25.00</td>
+                                                <td>25.00</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td><strong>4.17</strong></td>
+                                                <td>0.00</td>
+                                                <td>16.67</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>37.50</td>
+                                                <td><strong>58.30</strong></td>
+                                                <td>16.67</td>
+                                                <td>16.67</td>
+                                                <td>14.44</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">SD3<sup>†</sup></td>
+                                                <td><strong>33.33</strong></td>
+                                                <td>50.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td><strong>25.00</strong></td>
+                                                <td>0.00</td>
+                                                <td>29.17</td>
+                                                <td>16.67</td>
+                                                <td>16.67</td>
+                                                <td>16.67</td>
+                                                <td>13.06</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: rgb(132, 132, 132);">Pixart<sup>†</sup></td>
+                                                <td><strong>33.33</strong></td>
+                                                <td>50.00</td>
+                                                <td>0.00</td>
+                                                <td><strong>58.33</strong></td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td><strong>58.33</strong></td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>8.33</td>
+                                                <td>0.00</td>
+                                                <td>37.50</td>
+                                                <td>41.67</td>
+                                                <td>16.67</td>
+                                                <td>16.67</td>
+                                                <td>21.39</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Anole</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="content has-text-centered" style="margin-top: 5%;">
+                                <p class="mt-3">
+                                    Each task category is averaged across all its subtasks, with the top-ranked model
+                                    scores for each subtask highlighted in <strong>bold</strong>. "<sup>†</sup>"
+                                    represents the use of MLLM for prompt rephrasing. Model names in blue name
+                                    represents one that does not rely on any other model capabilities.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- BibTex citation -->
+    <!-- <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">Citation</h2>
+            Please kindly cite our paper if you use our code, data, models or results:
+            <br><br>
+            <pre><code>
+
+            </code></pre>
+        </div>
+    </section> -->
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content">
+
+                        <p>
+                            This page was built using the <a
+                                href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                                target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page. You are
+                            free
+                            to borrow the of this website, we just ask that you link back to this page in the
+                            footer.
+                            <br> This website is licensed under a <a rel="license"
+                                href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                                Commons Attribution-ShareAlike 4.0 International License</a>.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+<style>
+    .buttonGroup {
+        text-align: center;
+    }
+
+    .buttonGroup>button {
+        padding: 15px;
+        color: white;
+        background-color: #363636;
+        border-radius: 5px;
+    }
+
+    .buttonGroup>button:hover {
+        box-shadow: 5px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        /* 确保移动端滚动平滑 */
+    }
+
+    .table {
+        table-layout: auto;
+        /* 允许根据内容调整列宽 */
+        width: 100%;
+        /* 让表格占满容器 */
+        border-collapse: collapse;
+        /* 去掉单元格间的空隙 */
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        /* 字体大小 */
+        margin: 20px 0;
+        /* 表格与其他内容保持间距 */
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #bfbfbf;
+        /* 边框颜色 */
+        padding: 10px;
+        /* 单元格内边距 */
+        text-align: center;
+        /* 居中对齐 */
+        vertical-align: middle;
+        /* 垂直居中 */
+        white-space: nowrap;
+        /* 禁止换行 */
+    }
+
+    /* 表头样式 */
+    .table thead tr {
+        background-color: #dbdbdb;
+        /* 深灰色背景 */
+        color: white;
+        /* 白色文字 */
+        font-weight: bold;
+        /* 加粗字体 */
+        text-align: center;
+        /* 居中 */
+    }
+
+    .table thead th {
+        padding: 15px;
+        /* 增加表头内边距 */
+    }
+
+    /* 行交替背景色 */
+    .table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+        /* 浅灰色背景 */
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+        /* 白色背景 */
+    }
+
+    /* 特殊样式：前四行灰色背景 */
+    .table tbody tr.has-background-grey-lighter {
+        background-color: #e0e0e0 !important;
+        /* 浅灰色背景 */
+        font-weight: normal;
+        /* 默认字体粗细 */
+    }
+
+    /* 特殊样式：其他行的第一列加粗 */
+    .table tbody tr td:first-child {
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+    /* 鼠标悬停时高亮行 */
+    .table tbody tr:hover {
+        background-color: #e8f1fc;
+        /* 浅蓝色高亮 */
+    }
+
+    .card-slider-container {
+        position: relative;
+        width: 500px;
+        /* 限制为单个卡片宽度 */
+        overflow: hidden;
+        /* 隐藏溢出部分 */
+        margin: 0 auto;
+        /* 居中容器 */
+    }
+
+    .card-display {
+        display: flex;
+        transition: transform 0.3s ease-in-out;
+        /* 平滑切换动画 */
+        width: 500px;
+        /* 设置宽度为单个卡片的宽度 */
+        overflow: hidden;
+        /* 隐藏溢出内容 */
+        justify-content: flex-start;
+        /* 卡片从左到右排列 */
+        gap: 20px;
+        /* 设置卡片间距 */
+        margin: 0 auto;
+        /* 容器居中 */
+    }
+
+    .scrollable-card {
+        flex: 0 0 60%;
+        /* 卡片占满整个容器 */
+        max-width: 60%;
+        /* 确保宽度自适应 */
+        height: auto;
+        /* 高度根据内容自适应 */
+        overflow-y: auto;
+        /* 支持垂直滚动 */
+        margin: 0 auto;
+        /* 居中 */
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #fff;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .slider-button {
+        background-color: #007BFF;
+        /* 按钮背景色 */
+        border: none;
+        color: white;
+        /* 按钮文字颜色 */
+        font-size: 18px;
+        /* 按钮文字大小 */
+        padding: 10px 20px;
+        /* 按钮内边距 */
+        cursor: pointer;
+        /* 鼠标悬停样式 */
+        border-radius: 5px;
+        /* 按钮圆角 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        /* 按钮阴影 */
+        position: absolute;
+        /* 使用绝对定位 */
+        top: 50%;
+        /* 垂直居中 */
+        transform: translateY(-50%);
+        /* 修正垂直位置 */
+        z-index: 10;
+        /* 提高层级，防止被遮挡 */
+        display: block;
+        /* 确保按钮可见 */
+    }
+
+    .slider-button.left-button {
+        left: 10px;
+        /* 调整到容器左侧 */
+    }
+
+    .slider-button.right-button {
+        right: 10px;
+        /* 调整到容器右侧 */
+    }
+
+    .slider-button:hover {
+        background-color: #0056b3;
+        /* 悬停时更深的背景色 */
+    }
+
+    .card-title {
+        font-size: 18px;
+        /* 设置标题大小 */
+        font-weight: bold;
+        /* 加粗标题 */
+        margin-bottom: 10px;
+        /* 和下面的内容保持间距 */
+        text-align: center;
+        /* 居中标题 */
+        color: #333;
+        /* 设置标题颜色 */
+    }
+
+    /* 前四行的灰色背景 */
+    .has-background-grey-lighter tr {
+        background-color: #e0e0e0 !important;
+        /* 浅灰色背景 */
+        font-weight: normal;
+        /* 默认字体粗细 */
+    }
+</style>
+
+</html>
